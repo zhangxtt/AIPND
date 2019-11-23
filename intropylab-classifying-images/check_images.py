@@ -36,20 +36,21 @@ def main():
     # collecting start time
     start_time = time()
     
-    # TODO: 2. Define get_input_args() function to create & retrieve command
+    # Done: 2. Define get_input_args() function to create & retrieve command
     # line arguments
     in_arg = get_input_args()
-    
+
+
     # TODO: 3. Define get_pet_labels() function to create pet image labels by
     # creating a dictionary with key=filename and value=file label to be used
     # to check the accuracy of the classifier function
     answers_dic = get_pet_labels()
 
-    # TODO: 4. Define classify_images() function to create the classifier 
-    # labels with the classifier function using in_arg.arch, comparing the 
+    # TODO: 4. Define classify_images() function to create the classifier
+    # labels with the classifier function using in_arg.arch, comparing the
     # labels, and creating a dictionary of results (result_dic)
     result_dic = classify_images()
-    
+
     # TODO: 5. Define adjust_results4_isadog() function to adjust the results
     # dictionary(result_dic) to determine if classifier correctly classified
     # images as 'a dog' or 'not a dog'. This demonstrates if the model can
@@ -61,7 +62,7 @@ def main():
     # dictionary (results_stats_dic)
     results_stats_dic = calculates_results_stats()
 
-    # TODO: 7. Define print_results() function to print summary results, 
+    # TODO: 7. Define print_results() function to print summary results,
     # incorrect classifications of dogs and breeds if requested.
     print_results()
 
@@ -76,7 +77,7 @@ def main():
 
 
 
-# TODO: 2.-to-7. Define all the function below. Notice that the input 
+# Done: 2.-to-7. Define all the function below. Notice that the input
 # parameters and return values have been left in the function's docstrings. 
 # This is to provide guidance for achieving a solution similar to the 
 # instructor provided solution. Feel free to ignore this guidance as long as 
@@ -98,7 +99,15 @@ def get_input_args():
     Returns:
      parse_args() -data structure that stores the command line arguments object  
     """
-    pass
+    input_parse = argparse.ArgumentParser(description='explain the dir, '
+                                                      'algorithm and dogfile command entered to python')
+    input_parse.add_argument('--dir', type=str, help='Path to the pet image file', default='pet_images/')
+    input_parse.add_argument('--arch', type=str, help='CNN model architecture to use for image classification',
+                             default='vgg')
+    input_parse.add_argument('--dogfile', type=str, help='Text file that contains all labels associated to '
+                                                         'dogs', default='dognames.txt')
+    return input_parse.parse_args()
+
 
 
 def get_pet_labels():
