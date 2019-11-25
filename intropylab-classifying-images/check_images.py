@@ -24,6 +24,7 @@ import argparse
 from time import time, sleep
 from os import listdir
 
+
 # Imports classifier function for using CNN to classify images
 from classifier import classifier
 
@@ -41,10 +42,11 @@ def main():
     in_arg = get_input_args()
 
 
-    # TODO: 3. Define get_pet_labels() function to create pet image labels by
+
+    # Done: 3. Define get_pet_labels() function to create pet image labels by
     # creating a dictionary with key=filename and value=file label to be used
     # to check the accuracy of the classifier function
-    answers_dic = get_pet_labels()
+    answers_dic = get_pet_labels(in_arg.dir)
 
     # TODO: 4. Define classify_images() function to create the classifier
     # labels with the classifier function using in_arg.arch, comparing the
@@ -110,7 +112,7 @@ def get_input_args():
 
 
 
-def get_pet_labels():
+def get_pet_labels(image_dir):
     """
     Creates a dictionary of pet labels based upon the filenames of the image 
     files. Reads in pet filenames and extracts the pet image labels from the 
@@ -123,7 +125,13 @@ def get_pet_labels():
      petlabels_dic - Dictionary storing image filename (as key) and Pet Image
                      Labels (as value)  
     """
-    pass
+    filelist = listdir(image_dir)
+    petlabels = {}
+    for filename in filelist:
+        petlabels[filename] = ''.join(filename.split('_')[:-1]).lower()
+    return petlabels
+
+
 
 
 def classify_images():
@@ -152,6 +160,7 @@ def classify_images():
                     classifer labels and 0 = no match between labels
     """
     pass
+
 
 
 def adjust_results4_isadog():
