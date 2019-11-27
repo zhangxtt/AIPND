@@ -48,29 +48,30 @@ def main():
     # to check the accuracy of the classifier function
     answers_dic = get_pet_labels(in_arg.dir)
 
-    # TODO: 4. Define classify_images() function to create the classifier
+    # Done: 4. Define classify_images() function to create the classifier
     # labels with the classifier function using in_arg.arch, comparing the
     # labels, and creating a dictionary of results (result_dic)
-    result_dic = classify_images()
+    result_dic = classify_images(in_arg.dir,answers_dic,'vgg')
 
-    # TODO: 5. Define adjust_results4_isadog() function to adjust the results
-    # dictionary(result_dic) to determine if classifier correctly classified
-    # images as 'a dog' or 'not a dog'. This demonstrates if the model can
-    # correctly classify dog images as dogs (regardless of breed)
-    adjust_results4_isadog()
 
-    # TODO: 6. Define calculates_results_stats() function to calculate
-    # results of run and puts statistics in a results statistics
-    # dictionary (results_stats_dic)
-    results_stats_dic = calculates_results_stats()
-
-    # TODO: 7. Define print_results() function to print summary results,
-    # incorrect classifications of dogs and breeds if requested.
-    print_results()
-
-    # Done: 1. Define end_time to measure total program runtime
-    # by collecting end time
-    end_time = time()
+    # # TODO: 5. Define adjust_results4_isadog() function to adjust the results
+    # # dictionary(result_dic) to determine if classifier correctly classified
+    # # images as 'a dog' or 'not a dog'. This demonstrates if the model can
+    # # correctly classify dog images as dogs (regardless of breed)
+    # adjust_results4_isadog()
+    #
+    # # TODO: 6. Define calculates_results_stats() function to calculate
+    # # results of run and puts statistics in a results statistics
+    # # dictionary (results_stats_dic)
+    # results_stats_dic = calculates_results_stats()
+    #
+    # # TODO: 7. Define print_results() function to print summary results,
+    # # incorrect classifications of dogs and breeds if requested.
+    # print_results()
+    #
+    # # Done: 1. Define end_time to measure total program runtime
+    # # by collecting end time
+    # end_time = time()
 
     # Done: 1. Define tot_time to computes overall runtime in
     # seconds & prints it in hh:mm:ss format
@@ -128,13 +129,13 @@ def get_pet_labels(image_dir):
     filelist = listdir(image_dir)
     petlabels = {}
     for filename in filelist:
-        petlabels[filename] = ''.join(filename.split('_')[:-1]).lower()
+        petlabels[filename] = ' '.join(filename.split('_')[:-1]).lower()
     return petlabels
 
 
 
 
-def classify_images():
+def classify_images(images_dir,petlabel_dic,model):
     """
     Creates classifier labels with classifier function, compares labels, and 
     creates a dictionary containing both labels and comparison of them to be
@@ -159,7 +160,32 @@ def classify_images():
                     idx 2 = 1/0 (int)   where 1 = match between pet image and 
                     classifer labels and 0 = no match between labels
     """
-    pass
+    results_dic = {}
+    for image in listdir(images_dir):
+        result = []
+        result.append(petlabel_dic[image])
+        path = images_dir + image
+        classifier_result = classifier(path, model).lower()
+        result.append(classifier_result)
+        #将识别器识别的结果全部小写,字符串
+        raw_result = []
+        for element in classifier_result.split(','):
+            raw_result.append(element.strip())
+        #将识别器结果字符串中的空格去除，list
+        if result[0] in raw_result:
+            #result[1] = classifier_result
+            result.append(1)
+        else:
+            result.append(0)
+            for i in raw_result:
+                if result[0] in i.split(' '):
+                    #result[1] = classifier_result
+                    result[2] = 1
+                    break
+             #result[1] =classifier_result
+
+        results_dic[image] = result
+    return results_dic
 
 
 
