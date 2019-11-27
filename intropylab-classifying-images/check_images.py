@@ -54,12 +54,14 @@ def main():
     result_dic = classify_images(in_arg.dir,answers_dic,'vgg')
 
 
-    # # TODO: 5. Define adjust_results4_isadog() function to adjust the results
-    # # dictionary(result_dic) to determine if classifier correctly classified
-    # # images as 'a dog' or 'not a dog'. This demonstrates if the model can
-    # # correctly classify dog images as dogs (regardless of breed)
-    # adjust_results4_isadog()
-    #
+    # Done: 5. Define adjust_results4_isadog() function to adjust the results
+    # dictionary(result_dic) to determine if classifier correctly classified
+    # images as 'a dog' or 'not a dog'. This demonstrates if the model can
+    # correctly classify dog images as dogs (regardless of breed)
+    adjust_results4_isadog(result_dic,in_arg.dogfile)
+
+
+
     # # TODO: 6. Define calculates_results_stats() function to calculate
     # # results of run and puts statistics in a results statistics
     # # dictionary (results_stats_dic)
@@ -68,10 +70,10 @@ def main():
     # # TODO: 7. Define print_results() function to print summary results,
     # # incorrect classifications of dogs and breeds if requested.
     # print_results()
-    #
-    # # Done: 1. Define end_time to measure total program runtime
-    # # by collecting end time
-    # end_time = time()
+
+    # Done: 1. Define end_time to measure total program runtime
+    # by collecting end time
+    end_time = time()
 
     # Done: 1. Define tot_time to computes overall runtime in
     # seconds & prints it in hh:mm:ss format
@@ -189,7 +191,7 @@ def classify_images(images_dir,petlabel_dic,model):
 
 
 
-def adjust_results4_isadog():
+def adjust_results4_isadog(results_dic,dogsfile):
     """
     Adjusts the results dictionary to determine if classifier correctly 
     classified images 'as a dog' or 'not a dog' especially when not a match. 
@@ -216,8 +218,27 @@ def adjust_results4_isadog():
                 text file's name)
     Returns:
            None - results_dic is mutable data type so no return needed.
-    """           
-    pass
+    """
+    dognames = {}
+    with open (dogsfile,'r') as f:
+        line = f.readline()
+        while line != '':
+            line = line.rstrip()
+            if line not in dognames:
+                dognames[line] = 1
+            else:
+                print('Warning! Not duplication!')
+            line = f.readline()
+    for image,results in results_dic.items():
+        if results[0] in dognames:
+            results.append(1)
+        else:
+            results.append(0)
+        if results[1] in dognames:
+            results.append(1)
+        else:
+            results.append(0)
+
 
 
 def calculates_results_stats():
