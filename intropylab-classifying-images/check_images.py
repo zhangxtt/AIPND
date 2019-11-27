@@ -62,11 +62,11 @@ def main():
 
 
 
-    # # TODO: 6. Define calculates_results_stats() function to calculate
-    # # results of run and puts statistics in a results statistics
-    # # dictionary (results_stats_dic)
-    # results_stats_dic = calculates_results_stats()
-    #
+    # Done: 6. Define calculates_results_stats() function to calculate
+    # results of run and puts statistics in a results statistics
+    # dictionary (results_stats_dic)
+    results_stats_dic = calculates_results_stats(result_dic)
+
     # # TODO: 7. Define print_results() function to print summary results,
     # # incorrect classifications of dogs and breeds if requested.
     # print_results()
@@ -77,7 +77,7 @@ def main():
 
     # Done: 1. Define tot_time to computes overall runtime in
     # seconds & prints it in hh:mm:ss format
-    tot_time = start_time - end_time
+    tot_time = end_time - start_time
     print("\n** Total Elapsed Runtime:", tot_time)
 
 
@@ -241,7 +241,7 @@ def adjust_results4_isadog(results_dic,dogsfile):
 
 
 
-def calculates_results_stats():
+def calculates_results_stats(results_dic):
     """
     Calculates statistics of the results of the run using classifier's model 
     architecture on classifying images. Then puts the results statistics in a 
@@ -265,7 +265,30 @@ def calculates_results_stats():
                      name (starting with 'pct' for percentage or 'n' for count)
                      and the value is the statistic's value 
     """
-    pass
+    results_stats = {}
+    results_stats['N_Images'] = len(results_dic)
+    results_stats['N_DogImages'] = 0
+    results_stats['N_NotDogImages'] = 0
+    N_Corr_Dog = 0
+    N_Corr_Not_Dog = 0
+    N_Corr_Breed = 0
+    for image,result in results_dic.items():
+        if result[3] == 0:
+            results_stats['N_NotDogImages'] += 1
+        else:
+            results_stats['N_DogImages'] += 1
+        if result[3] == result[4] == 1:
+            N_Corr_Dog += 1
+        elif result[3] == result[4] == 0:
+            N_Corr_Not_Dog += 1
+        if result[2] == result[3] == 1:
+            N_Corr_Breed += 1
+    results_stats['Pct_Corr_Dog'] = N_Corr_Dog/results_stats['N_DogImages']*100
+    results_stats['Pct_Corr_Not_Dog'] = N_Corr_Not_Dog/results_stats['N_NotDogImages']*100
+    results_stats['Pct_Corr_Breed'] = N_Corr_Breed/results_stats['N_DogImages']*100
+    return results_stats
+
+
 
 
 def print_results():
